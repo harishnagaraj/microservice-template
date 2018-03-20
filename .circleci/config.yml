@@ -71,6 +71,14 @@ jobs:
       - deploy:
           name: deploy 
           command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
               docker push hearstautos/first-microservice:$CIRCLE_SHA1
               ./build/send_to_deploybot_inbox $CIRCLE_SHA1
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
+              docker push hearstautos/first-microservice:$CIRCLE_SHA1
+              ./build/send_to_deploybot_inbox $CIRCLE_SHA1
+            fi  
+
