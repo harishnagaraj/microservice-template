@@ -1,0 +1,29 @@
+{
+  "name": "cd-audit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "now": {
+    "alias": "cd-audit.com"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "nodemon": "./node_modules/.bin/nodemon index.js",
+    "test:lint": "eslint ."
+  },
+  "author": "Andy Magoon",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "htmlparser": "^1.7.7",
+    "mongoose": "^4.6.4",
+    "request": "^2.75.0",
+    "xmldom": "^0.1.22"
+  },
+  "devDependencies": {
+    "eslint": "^3.10.1",
+    "nodemon": "^1.11.0"
+  }
+}

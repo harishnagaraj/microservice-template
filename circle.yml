@@ -1,0 +1,28 @@
+machine:
+  services:
+    - docker
+  environment:
+    APP_NAME: first-microservice
+
+dependencies:
+#   cache_directories:
+#     - circle_cache
+#     - "~/docker"
+  pre:
+    - docker version
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+#   override:
+#     - ./build/apply_cached_timestamp circle_cache package.json 
+
+test:
+  override:
+    - docker build -t hearstautos/first-microservice:$CIRCLE_SHA1 .
+
+
+deployment:
+  hub:
+    branch: [master,develop]
+    commands:
+      - docker push hearstautos/first-microservice:$CIRCLE_SHA1
+      - ./build/send_to_deploybot_inbox $CIRCLE_SHA1 

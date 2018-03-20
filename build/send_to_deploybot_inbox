@@ -1,0 +1,20 @@
+#!/bin/sh
+
+PACKAGE_NAME=$1
+DEPLOYBOT_INBOX = $2
+CONTEXT=$2
+
+if [ "$PACKAGE_NAME" = "" ]; then
+  echo "Please provide deploybot package name"
+  exit 1;
+fi;
+
+
+
+#echo $CONTEXT > deploy/context
+
+#tar cfj $PACKAGE_NAME.tbz deploy
+cd deploy && mv app-config.json $PACKAGE_NAME.json
+
+aws s3 cp $PACKAGE_NAME.json s3://deploybot-inbox-testing/$PACKAGE_NAME.json
+
