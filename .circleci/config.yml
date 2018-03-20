@@ -1,0 +1,77 @@
+version: 2
+jobs:
+  build:
+    working_directory: /usr/src/first-microservice
+    docker:
+      - image: node:6.2.0
+    steps:
+      - checkout
+      - setup_remote_docker:
+          reusable: true    # default - false
+          exclusive: true   # default - true
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run:
+          name: Install aws cli
+          command: |
+            set -x
+            apt-get update && apt-get install -y \
+            curl \
+            python2.7 \
+            python-dev 
+            curl -O https://bootstrap.pypa.io/get-pip.py
+            python get-pip.py && pip install awscli
+            which aws
+            aws --version
+            echo $PATH
+      - restore_cache:
+          name: Restoring cache - node_modules
+          keys:
+            - node_modules-{{ checksum "package.json" }}
+            - node_modules-
+      #https://circleci.com/blog/how-to-build-a-docker-image-on-circleci-2-0/      
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/app.tar
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/app.tar | true
+      - run:
+          name: npm install
+          command: |
+             npm install
+      - save_cache:
+          name: Saving cache - node_modules
+          key: node_modules-{{ checksum "package.json" }}
+          paths:
+            - "node_modules"
+      - run:
+          name: create docker image
+          command: |
+             docker build -t hearstautos/first-microservice:$CIRCLE_SHA1 .
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/app.tar hearstautos/first-microservice:$CIRCLE_SHA1
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/app.tar
+
+       - deploy:
+          name: deploy 
+          command: |
+              docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
+              docker push hearstautos/first-microservice:$CIRCLE_SHA1
+              ./build/send_to_deploybot_inbox $CIRCLE_SHA1
