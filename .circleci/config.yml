@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /usr/src/first-microservice
+    working_directory: /usr/src/<microservicename>
     docker:
       - image: node:6.2.0
     steps:
@@ -58,12 +58,12 @@ jobs:
       - run:
           name: create docker image
           command: |
-             docker build -t hearstautos/first-microservice:$CIRCLE_SHA1 .
+             docker build -t hearstautos/<microservicename>:$CIRCLE_SHA1 .
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
-            docker save -o /caches/app.tar hearstautos/first-microservice:$CIRCLE_SHA1
+            docker save -o /caches/app.tar hearstautos/<microservicename>:$CIRCLE_SHA1
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
@@ -73,12 +73,12 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
-              docker push hearstautos/first-microservice:$CIRCLE_SHA1
+              docker push hearstautos/<microservicename>:$CIRCLE_SHA1
               ./build/send_to_deploybot_inbox $CIRCLE_SHA1
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
-              docker push hearstautos/first-microservice:$CIRCLE_SHA1
+              docker push hearstautos/<microservicename>:$CIRCLE_SHA1
               ./build/send_to_deploybot_inbox $CIRCLE_SHA1
             fi  
 

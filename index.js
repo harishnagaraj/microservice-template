@@ -1,10 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
-
 const mongoService = require('./server/mongoService')
 const Content = mongoService.Content
-
 const htmlparser = require("htmlparser");
 
 /*****************************************************

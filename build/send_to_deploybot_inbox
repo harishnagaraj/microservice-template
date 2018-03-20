@@ -1,7 +1,6 @@
 #!/bin/sh
 
 PACKAGE_NAME=$1
-DEPLOYBOT_INBOX = $2
 CONTEXT=$2
 
 if [ "$PACKAGE_NAME" = "" ]; then

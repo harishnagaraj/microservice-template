@@ -2,30 +2,30 @@
   "application":{
       "dev": {
          "appcluster": "dev-microservices",
-         "appservice": "first-microservice",
-         "apptaskdefinition": "first-microservice-task-dev",
-         "appimage":"hearstautos/first-microservice",
+         "appservice": "<microservicename>",
+         "apptaskdefinition": "<microservicename>-task-dev",
+         "appimage":"hearstautos/<microservicename>",
          "configurl": "null"
       },
       "qa": {
 	     "appcluster": "qa-microservices",
-         "appservice": "first-microservice",
-         "apptaskdefinition": "first-microservice-task-qa",
-         "appimage":"hearstautos/first-microservice",
+         "appservice": "<microservicename>",
+         "apptaskdefinition": "<microservicename>-task-qa",
+         "appimage":"hearstautos/<microservicename>",
          "configurl": "null"
       },
       "preprod": {
          "appcluster": "preprod-microservices",
-         "appservice": "first-microservice",
-         "apptaskdefinition": "first-microservice-task-preprod",
-         "appimage":"hearstautos/first-microservice",
+         "appservice": "<microservicename>",
+         "apptaskdefinition": "<microservicename>-task-preprod",
+         "appimage":"hearstautos/<microservicename>",
          "configurl": "null"
       },
       "prod": {
          "appcluster": "prod-microservices",
-         "appservice": "first-microservice",
-         "apptaskdefinition": "first-microservice-task-prod",
-         "appimage":"hearstautos/first-microservice",
+         "appservice": "<microservicename>",
+         "apptaskdefinition": "<microservicename>-task-prod",
+         "appimage":"hearstautos/<microservicename>",
          "configurl": "null"
       }
   }
